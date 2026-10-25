@@ -1,59 +1,41 @@
-# PapayaHatidgoAdmin
+# Papaya HatidGo Admin
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.7.
+The administrators' website for Papaya HatidGo (Phase 14): verify drivers' papers, watch live rides, manage users, fares, settings, plans and payments, and read reports and the audit log.
 
-## Development server
+- **Built with:** Angular 22 + Tailwind CSS 4, themed with the mobile app's DESIGN.md tokens.
+- **Talks to:** the same Laravel API as the app (`papaya-hatidgo-api`, `/api/v1/admin/*`).
+- **Who can log in:** only users with `role = admin`. Passengers and drivers are refused and their token is revoked.
+- **Plan and decisions:** `papaya-hatid-go/docs/phase-14-admin-web.md`.
 
-To start a local development server, run:
+## Run it (development)
 
-```bash
-ng serve
+1. Start the API: WAMP (MySQL) running, then in `papaya-hatidgo-api` run `php artisan serve`.
+2. In this folder:
+   ```powershell
+   npm install
+   npm start
+   ```
+3. Open **http://localhost:4300** and log in with the admin account (dev seed: `admin@example.test` / `password`).
+
+Port 4300, so it can run next to the mobile app's `npm start` (4200).
+
+## The live map's key (MapTiler)
+
+The map uses MapTiler "Streets" when `src/environments/map-key.ts` has a key; otherwise OpenStreetMap.
+
+- `map-key.ts` is **git-ignored**: the key is never committed.
+- `npm start` / `build` / `test` create it, empty, from `map-key.example.ts` if it's missing.
+- Paste the key into it: `export const MAPTILER_KEY = '…';`
+
+## Tests and build
+
+```powershell
+npm test          # unit tests (Vitest)
+npm run build     # production build → dist/
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Before release
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Put the real HTTPS API address in `src/environments/environment.prod.ts`.
+- Restrict the API's CORS to the admin website's address.
+- Restrict the MapTiler key in the MapTiler account.

@@ -1,1 +1,213 @@
-/* You can add global styles to this file, and also import other style files */
+/*
+ * Papaya HatidGo Admin: Tailwind 4, themed with the mobile app's DESIGN.md tokens (Phase 14,
+ * decision 1). Always White, Atkinson Hyperlegible Next, Deep Papaya for the one primary action,
+ * green only for success, status = a mark + a word, never color alone.
+ */
+@import "@fontsource/atkinson-hyperlegible-next/400.css";
+@import "@fontsource/atkinson-hyperlegible-next/700.css";
+@import "@fontsource/atkinson-hyperlegible-next/800.css";
+@import "leaflet/dist/leaflet.css";
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Atkinson Hyperlegible Next", "Segoe UI", Roboto, sans-serif;
+
+  --color-ground: #ffffff; /* page background */
+  --color-surface: #f7f3ee; /* warm off-white: cards, fields, table heads */
+  --color-line: #d8cfc6; /* hairlines (decorative) */
+  --color-field-line: #8a7f77; /* field borders: 3.9:1 */
+  --color-papaya: #c2410c; /* Deep Papaya: primary buttons, links (white text 5.2:1) */
+  --color-papaya-pressed: #9a3412;
+  --color-papaya-tint: #fff1e6;
+  --color-leaf: #2e7d32; /* success only */
+  --color-leaf-tint: #e8f5e9;
+  --color-ink: #1c1714; /* reading text 17.8:1 */
+  --color-ink-soft: #5a4f47; /* secondary text 7.9:1 */
+  --color-alert: #b42318; /* errors, always with a mark */
+  --color-alert-ground: #fef0ee;
+  --color-warn: #8a4b00; /* "waiting" text on warn ground */
+  --color-warn-ground: #fff4e0;
+
+  --radius-hg: 16px;
+}
+
+@layer base {
+  html {
+    font-size: 16px; /* the 16px floor (DESIGN.md); desktop density */
+  }
+
+  body {
+    @apply bg-ground font-sans text-ink antialiased;
+    font-variant-numeric: tabular-nums; /* money and counts line up */
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  /* A one-column grid may shrink to the screen, so wide tables scroll inside their own box
+     instead of widening the whole page on a narrow screen (Phase 14 browser check). */
+  .grid:not([class*="grid-cols"]) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* A scrolling box must contain its visually-hidden (absolute) labels too, e.g. a table's
+     "Actions" header: unpositioned, they escaped the box and widened the page by 250 px. */
+  .overflow-x-auto {
+    position: relative;
+  }
+}
+
+@layer components {
+  /* Buttons: one primary per screen; others outline or quiet. 44px min (desktop pointer). */
+  .btn {
+    @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl px-4 text-base font-bold whitespace-nowrap transition-colors disabled:cursor-not-allowed disabled:opacity-55;
+  }
+  .btn-primary {
+    @apply bg-papaya text-white hover:bg-papaya-pressed;
+  }
+  .btn-outline {
+    @apply bg-ground text-papaya ring-2 ring-papaya ring-inset hover:bg-papaya-tint;
+  }
+  .btn-danger {
+    @apply bg-alert text-white hover:bg-[#8f1c13];
+  }
+  .btn-quiet {
+    @apply text-ink-soft underline underline-offset-4 hover:text-ink;
+  }
+
+  .card {
+    @apply rounded-hg bg-ground p-5 ring-2 ring-line;
+  }
+
+  .field {
+    @apply grid gap-1.5;
+  }
+  .field-label {
+    @apply text-base font-bold text-ink;
+  }
+  .field-hint {
+    @apply text-base text-ink-soft;
+  }
+  .input {
+    @apply min-h-11 w-full rounded-xl border-2 border-field-line bg-surface px-3 text-base text-ink placeholder:text-ink-soft focus:border-papaya focus:outline-none;
+  }
+  .input-error {
+    @apply border-alert;
+  }
+
+  /* Status chips: a mark (dot) + the word. */
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-base font-bold whitespace-nowrap ring-2 ring-inset;
+  }
+  .chip::before {
+    content: "";
+    @apply size-2 rounded-full bg-current;
+  }
+  .chip-ok {
+    @apply bg-leaf-tint text-leaf ring-leaf/40;
+  }
+  .chip-wait {
+    @apply bg-warn-ground text-warn ring-warn/30;
+  }
+  .chip-bad {
+    @apply bg-alert-ground text-alert ring-alert/40;
+  }
+  .chip-neutral {
+    @apply bg-surface text-ink-soft ring-line;
+  }
+  .chip-active {
+    @apply bg-papaya-tint text-papaya ring-papaya/40;
+  }
+
+  .notice-error {
+    @apply flex items-start gap-2 rounded-xl bg-alert-ground p-3 text-alert ring-2 ring-alert ring-inset;
+  }
+  .notice-ok {
+    @apply flex items-start gap-2 rounded-xl bg-leaf-tint p-3 text-ink ring-2 ring-leaf ring-inset;
+  }
+
+  /* Data tables */
+  .table {
+    @apply w-full border-collapse text-left text-base;
+  }
+  .table th {
+    @apply bg-surface px-3 py-2.5 font-bold text-ink-soft;
+  }
+  .table td {
+    @apply border-t-2 border-line px-3 py-3 align-top;
+  }
+  .table tbody tr:hover td {
+    @apply bg-surface/60;
+  }
+}
+
+/* ---------- Map (Leaflet): the same marks as the mobile app ---------- */
+.hg-marker {
+  background: none;
+  border: 0;
+}
+.hg-marker__dot {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: inset 0 0 0 6px var(--color-papaya), 0 0 0 2px #fff;
+}
+.hg-marker__pin {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: var(--color-ink);
+  box-shadow: inset 0 0 0 6px var(--color-ink), inset 0 0 0 11px #fff, 0 0 0 2px #fff;
+}
+.hg-marker__driver {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--color-papaya);
+  box-shadow: inset 0 0 0 3px var(--color-papaya);
+}
+.hg-marker__driver svg {
+  width: 24px;
+  height: 24px;
+}
+/* On a ride: filled papaya (a different mark, not just a color). */
+.hg-marker--busy .hg-marker__driver {
+  background: var(--color-papaya);
+  color: #fff;
+}
+/* Online but not located lately: the server no longer matches them. */
+.hg-marker--stale .hg-marker__driver {
+  color: var(--color-ink-soft);
+  box-shadow: inset 0 0 0 3px var(--color-ink-soft);
+  opacity: 0.7;
+}
+.hg-line {
+  fill: none;
+  stroke-linecap: round;
+}
+.hg-line--route {
+  stroke: var(--color-ink);
+  stroke-width: 3px;
+  stroke-dasharray: 10 8;
+  stroke-opacity: 0.6;
+}
+.hg-area {
+  stroke: var(--color-papaya);
+  stroke-width: 2px;
+  stroke-dasharray: 6 6;
+  fill: var(--color-papaya);
+  fill-opacity: 0.04;
+}
+.leaflet-control-attribution {
+  font-family: var(--font-sans);
+  font-size: 12px;
+}

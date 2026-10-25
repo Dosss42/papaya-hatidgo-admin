@@ -42,3 +42,6 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# The MapTiler key: local only, never committed. Template: src/environments/map-key.example.ts
+/src/environments/map-key.ts
