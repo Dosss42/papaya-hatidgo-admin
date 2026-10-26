@@ -191,7 +191,7 @@ export class FaresPage {
 
   protected readonly fareFields: { key: keyof FareForm; label: string; hint: string; min: number; max: number; step: number }[] = [
     { key: 'base_fare', label: 'Base fare (₱)', hint: 'Charged on every trip', min: 0, max: 1000, step: 0.5 },
-    { key: 'rate_per_km', label: 'Per km (₱)', hint: 'Times the straight-line distance', min: 0, max: 500, step: 0.5 },
+    { key: 'rate_per_km', label: 'Per km (₱)', hint: 'Times the road distance', min: 0, max: 500, step: 0.5 },
     { key: 'minimum_fare', label: 'Minimum fare (₱)', hint: 'A short trip costs at least this', min: 0, max: 2000, step: 0.5 },
     { key: 'service_fee', label: 'Service fee (₱)', hint: 'Added to each trip', min: 0, max: 500, step: 0.5 },
     { key: 'return_rate_multiplier', label: 'Balikan way back (×)', hint: 'e.g. 0.8 = 80% of the way there', min: 0, max: 3, step: 0.05 },

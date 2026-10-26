@@ -31,6 +31,8 @@ interface LiveRide {
   plate_number: string | null;
   pickup: { lat: number; lng: number; landmark: string | null };
   destination: { lat: number; lng: number; landmark: string | null };
+  /** The road the fare was measured on, [[lat, lng], …]; null on rides booked before roads. */
+  route?: [number, number][] | null;
   estimated_total: string;
   requested_at: string | null;
 }
@@ -261,7 +263,9 @@ export class RidesPage implements AfterViewInit, OnDestroy {
 
     this.layer.clearLayers();
     for (const r of live.rides) {
-      L.polyline([[r.pickup.lat, r.pickup.lng], [r.destination.lat, r.destination.lng]], { className: 'hg-line hg-line--route', interactive: false }).addTo(this.layer);
+      // The road the fare was measured on (after Phase 13); a straight line for older rides.
+      const line: [number, number][] = r.route && r.route.length >= 2 ? r.route : [[r.pickup.lat, r.pickup.lng], [r.destination.lat, r.destination.lng]];
+      L.polyline(line, { className: 'hg-line hg-line--route', interactive: false }).addTo(this.layer);
       this.pin([r.pickup.lat, r.pickup.lng], 'pickup', `${r.reference_no} pickup: ${r.pickup.landmark ?? 'pinned'}`);
       this.pin([r.destination.lat, r.destination.lng], 'destination', `${r.reference_no} destination: ${r.destination.landmark ?? 'pinned'}`);
     }
