@@ -34,7 +34,8 @@ type FareForm = Record<'base_fare' | 'rate_per_km' | 'minimum_fare' | 'return_ra
 const SETTING_VIEW: Record<string, { group: string; label: string; unit?: string; min?: number; max?: number; step?: number }> = {
   'ride.one_way_enabled': { group: 'Ride types', label: 'One-way rides' },
   'ride.two_way_enabled': { group: 'Ride types', label: 'Balikan (two-way) rides' },
-  'matching.radius_km': { group: 'Matching', label: 'Search radius for drivers', unit: 'km', min: 0.5, max: 20, step: 0.5 },
+  'matching.radius_km': { group: 'Matching', label: 'Ringing alert for drivers within', unit: 'km', min: 0.5, max: 20, step: 0.5 },
+  'matching.board_radius_km': { group: 'Matching', label: 'Drivers see open requests within', unit: 'km', min: 1, max: 20, step: 0.5 },
   'matching.max_offers': { group: 'Matching', label: 'Drivers offered each request', min: 1, max: 20, step: 1 },
   'matching.request_timeout_seconds': { group: 'Matching', label: 'Time to find a driver', unit: 'seconds', min: 30, max: 600, step: 10 },
   'matching.stale_online_minutes': { group: 'Matching', label: 'Online only if located within', unit: 'minutes', min: 1, max: 15, step: 1 },
