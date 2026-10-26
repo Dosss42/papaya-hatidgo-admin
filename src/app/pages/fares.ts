@@ -39,6 +39,7 @@ const SETTING_VIEW: Record<string, { group: string; label: string; unit?: string
   'matching.request_timeout_seconds': { group: 'Matching', label: 'Time to find a driver', unit: 'seconds', min: 30, max: 600, step: 10 },
   'matching.stale_online_minutes': { group: 'Matching', label: 'Online only if located within', unit: 'minutes', min: 1, max: 15, step: 1 },
   'ride.min_distance_m': { group: 'Matching', label: 'Shortest allowed trip', unit: 'meters', min: 0, max: 5000, step: 10 },
+  'ride.passenger_cancel_after_minutes': { group: 'Matching', label: 'Passenger may cancel a driver on the way only after', unit: 'minutes', min: 1, max: 60, step: 1 },
   'service_area.center_lat': { group: 'Service area', label: 'Center latitude', unit: '°N', min: 4, max: 22, step: 0.0001 },
   'service_area.center_lng': { group: 'Service area', label: 'Center longitude', unit: '°E', min: 116, max: 127, step: 0.0001 },
   'service_area.radius_km': { group: 'Service area', label: 'Radius', unit: 'km', min: 0.5, max: 50, step: 0.5 },
